@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberSpork | Jason Gounder</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #000;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #111;
+      padding: 2rem;
+      border: 1px solid #00ff00;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      background: #000;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      font-family: inherit;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.5rem;
+    }
+    button {
+      background: #000;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 0.5rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Jason Gounder</h1>
+    <nav>
+      <a href="JasonGounderMain.html">Home</a>
+      <a href="About.html">About</a>
+      <a href="Experience.html">Experience</a>
+      <a href="Projects.html">Projects</a>
+      <a href="Contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="container">
+    <h2>🧪 CyberSpork v0.1</h2>
+    <p>A bite-sized CyberChef for quick encoding/decoding tasks. Paste text, hit a button, get results.</p>
+
+    <textarea id="input" placeholder="Enter your input here..."></textarea>
+
+    <div class="button-grid">
+      <button onclick="transform('base64encode')">Base64 Encode</button>
+      <button onclick="transform('base64decode')">Base64 Decode</button>
+      <button onclick="transform('hex2text')">Hex to Text</button>
+      <button onclick="transform('text2hex')">Text to Hex</button>
+      <button onclick="transform('rot13')">ROT13</button>
+      <button onclick="transform('reverse')">Reverse</button>
+    </div>
+
+    <textarea id="output" placeholder="Result..." readonly></textarea>
+  </section>
+
+  <footer>
+    <p style="text-align: center">&copy; 2025 Jason Gounder. All rights scrambled.</p>
+  </footer>
+
+  <script>
+    function transform(type) {
+      const input = document.getElementById('input').value;
+      let output = '';
+      try {
+        switch (type) {
+          case 'base64encode':
+            output = btoa(input);
+            break;
+          case 'base64decode':
+            output = atob(input);
+            break;
+          case 'hex2text':
+            output = input.replace(/\s+/g, '').match(/.{1,2}/g).map(h => String.fromCharCode(parseInt(h, 16))).join('');
+            break;
+          case 'text2hex':
+            output = Array.from(input).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join(' ');
+            break;
+          case 'rot13':
+            output = input.replace(/[a-zA-Z]/g, c => {
+              const base = c <= 'Z' ? 65 : 97;
+              return String.fromCharCode((c.charCodeAt(0) - base + 13) % 26 + base);
+            });
+            break;
+          case 'reverse':
+            output = input.split('').reverse().join('');
+            break;
+          default:
+            output = 'Unsupported operation';
+        }
+      } catch (e) {
+        output = 'Error: ' + e.message;
+      }
+      document.getElementById('output').value = output;
+    }
+  </script>
+</body>
+</html>

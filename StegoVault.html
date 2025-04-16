@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StegoVault | Jason Gounder</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #000;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 2rem;
+      background-color: #111;
+      border: 1px solid #00ff00;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 1rem;
+      background: #000;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      font-family: inherit;
+    }
+    canvas {
+      display: none;
+    }
+    #outputImage {
+      margin-top: 1rem;
+      border: 1px dashed #00ff00;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Jason Gounder</h1>
+    <nav>
+      <a href="JasonGounderMain.html">Home</a>
+      <a href="About.html">About</a>
+      <a href="Experience.html">Experience</a>
+      <a href="Projects.html">Projects</a>
+      <a href="Contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="container">
+    <h2>🖼️ StegoVault: Image Steganography</h2>
+    <p>Hide your secret message inside an image using lightweight steganography.</p>
+
+    <input type="file" id="imageInput" accept="image/*">
+    <textarea id="message" rows="4" placeholder="Enter secret message..."></textarea>
+    <button onclick="encodeMessage()">Hide Message</button>
+    <canvas id="canvas"></canvas>
+    <img id="outputImage">
+    <a id="downloadLink" style="display:none; color:#00ff00;" download="stego.png">Download Image</a>
+  </section>
+
+  <footer>
+    <p style="text-align: center">&copy; 2025 Jason Gounder. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function encodeMessage() {
+      const imgInput = document.getElementById('imageInput').files[0];
+      const msg = document.getElementById('message').value;
+
+      if (!imgInput || !msg) return alert('Upload an image and enter a message.');
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imageData.data;
+
+          let msgBits = msg.split('').map(char => char.charCodeAt(0).toString(2).padStart(8, '0')).join('') + '00000000';
+
+          for (let i = 0; i < msgBits.length && i * 4 < data.length; i++) {
+            data[i * 4] = (data[i * 4] & 0xFE) | parseInt(msgBits[i]);
+          }
+
+          ctx.putImageData(imageData, 0, 0);
+          const dataURL = canvas.toDataURL();
+          const output = document.getElementById('outputImage');
+          output.src = dataURL;
+          output.style.display = 'block';
+          document.getElementById('downloadLink').href = dataURL;
+          document.getElementById('downloadLink').style.display = 'block';
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(imgInput);
+    }
+  </script>
+</body>
+</html>

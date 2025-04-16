@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KeyForge | Jason Gounder</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #000;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      border: 1px solid #00ff00;
+      padding: 2rem;
+      background-color: #111;
+    }
+    label, select, input, button {
+      display: block;
+      margin-top: 1rem;
+      background-color: #000;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 0.5rem;
+      font-family: inherit;
+    }
+    #output {
+      margin-top: 1.5rem;
+      word-break: break-all;
+      padding: 1rem;
+      border: 1px dashed #00ff00;
+    }
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Jason Gounder</h1>
+    <nav>
+      <a href="JasonGounderMain.html">Home</a>
+      <a href="About.html">About</a>
+      <a href="Experience.html">Experience</a>
+      <a href="Projects.html">Projects</a>
+      <a href="Contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="container">
+    <h2>KeyForge 🔐</h2>
+    <p>Generate secure, random cryptographic keys in your browser. No data leaves your machine.</p>
+
+    <label for="length">Key Length (bits):</label>
+    <select id="length">
+      <option value="128">128</option>
+      <option value="256">256</option>
+      <option value="512">512</option>
+    </select>
+
+    <label for="encoding">Encoding:</label>
+    <select id="encoding">
+      <option value="hex">Hex</option>
+      <option value="base64">Base64</option>
+    </select>
+
+    <div class="button-group">
+      <button onclick="generateKey()">Generate Key</button>
+      <button onclick="copyKey()">Copy to Clipboard</button>
+    </div>
+
+    <div id="output"></div>
+  </section>
+
+  <footer>
+    <p style="text-align: center">&copy; 2025 Jason Gounder. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function generateKey() {
+      const length = parseInt(document.getElementById('length').value);
+      const encoding = document.getElementById('encoding').value;
+      const byteLength = length / 8;
+
+      const randomBytes = crypto.getRandomValues(new Uint8Array(byteLength));
+
+      let output = '';
+      if (encoding === 'hex') {
+        output = Array.from(randomBytes).map(b => b.toString(16).padStart(2, '0')).join('');
+      } else if (encoding === 'base64') {
+        const binaryStr = String.fromCharCode(...randomBytes);
+        output = btoa(binaryStr);
+      }
+
+      document.getElementById('output').textContent = output;
+    }
+
+    function copyKey() {
+      const output = document.getElementById('output').textContent;
+      if (!output) return alert('No key to copy!');
+
+      navigator.clipboard.writeText(output).then(() => {
+        alert('Key copied to clipboard!');
+      });
+    }
+  </script>
+</body>
+</html>

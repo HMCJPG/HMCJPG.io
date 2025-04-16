@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Bitcoin Generator</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #000;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      border: 1px solid #00ff00;
+      padding: 2rem;
+      background-color: #111;
+      text-align: center;
+    }
+    button {
+      background: #000;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 0.5rem 1.5rem;
+      font-family: inherit;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 2rem;
+    }
+    #status {
+      margin-top: 1.5rem;
+      white-space: pre-line;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Jason Gounder</h1>
+    <nav>
+      <a href="JasonGounderMain.html">Home</a>
+      <a href="About.html">About</a>
+      <a href="Experience.html">Experience</a>
+      <a href="Projects.html">Projects</a>
+      <a href="Contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="container">
+    <h2>🚨 Free Bitcoin Generator</h2>
+    <p>Enter your wallet address below to unlock 1 BTC:</p>
+    <input type="text" id="wallet" placeholder="Your Bitcoin Wallet..." style="width: 100%; margin-top: 1rem;">
+
+    <div id="status"></div>
+    <button onclick="beginDownload()">Start Mining</button>
+  </section>
+
+  <footer>
+    <p style="text-align: center">&copy; 2025 Jason Gounder. All rights definitely not reserved.</p>
+  </footer>
+
+  <script>
+    function beginDownload() {
+      const status = document.getElementById('status');
+      const wallet = document.getElementById('wallet').value.trim();
+
+      if (!wallet) {
+        alert('Please enter a wallet address');
+        return;
+      }
+
+      status.textContent = `Verifying wallet...
+Mining free Bitcoin...
+Packing payload...`;
+
+
+      setTimeout(() => {
+        status.textContent += '\n✅ Success! Click below to download unlocker tool:';
+
+        const download = document.createElement('a');
+        const blob = new Blob([
+          'you really thought you’d get free bitcoin huh.\n\nthis isn’t a trojan, but if it were…\n\n~ jpg'
+        ], { type: 'text/plain' });
+
+        download.href = URL.createObjectURL(blob);
+        download.download = 'trojan.exe.txt';
+        download.textContent = '\nDownload bitcoingenerator.exe';
+        download.style.display = 'block';
+        download.style.color = '#00ff00';
+        download.style.marginTop = '1rem';
+
+        status.appendChild(download);
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacker Typer Demo | Jason Gounder</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #000;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      padding: 2rem;
+    }
+    #terminal {
+      white-space: pre-wrap;
+      font-size: 1rem;
+      min-height: 80vh;
+      border: 1px solid #00ff00;
+      padding: 1rem;
+      background-color: #000;
+    }
+    #status {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #00ff00;
+      margin-top: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Jason Gounder</h1>
+    <nav>
+      <a href="JasonGounderMain.html">Home</a>
+      <a href="About.html">About</a>
+      <a href="Experience.html">Experience</a>
+      <a href="Projects.html">Projects</a>
+      <a href="Contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section>
+    <h2>HackerTyper Simulation</h2>
+    <p>Start typing anywhere on the screen. Press <strong>Shift+Enter</strong> for ACCESS GRANTED or <strong>Alt+Enter</strong> for ACCESS DENIED.</p>
+    <div id="terminal"></div>
+    <div id="status"></div>
+  </section>
+
+  <footer>
+    <p style="text-align: center">&copy; 2025 Jason Gounder. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const terminal = document.getElementById('terminal');
+    const status = document.getElementById('status');
+
+    const codeSnippets = [
+      'def encrypt(data):',
+      '    return aes.encrypt(data, key)',
+      'payload = fetch("/api/data")',
+      'system("nmap -sS 10.0.0.1")',
+      'if (user.isAdmin): grantAccess()',
+      'while (true) { scanPorts(); }',
+      'const buffer = new ArrayBuffer(1024);',
+      'socket.send("AUTHROOTX")',
+      'let entropy = Math.random() * 256;',
+    ];
+
+    let charIndex = 0;
+    let lineIndex = 0;
+
+    document.addEventListener('keydown', (e) => {
+      // ACCESS GRANTED
+      if (e.key === 'Enter' && e.shiftKey) {
+        status.textContent = 'ACCESS GRANTED';
+        status.style.color = '#00ff00';
+        return;
+      }
+
+      // ACCESS DENIED
+      if (e.key === 'Enter' && e.altKey) {
+        status.textContent = 'ACCESS DENIED';
+        status.style.color = '#ff3333';
+        return;
+      }
+
+      // Clear status if typing
+      status.textContent = '';
+
+      // Typing output simulation
+      const snippet = codeSnippets[lineIndex % codeSnippets.length];
+      terminal.textContent += snippet + '\n';
+      lineIndex++;
+
+      // Scroll to bottom
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  </script>
+</body>
+</html>
