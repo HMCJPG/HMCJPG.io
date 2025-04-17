@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MatrixRunner | Jason Gounder</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: black;
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      background-color: #000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+  <script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = 300;
+
+    function playBeep(frequency = 440, duration = 100) {
+      const context = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.type = 'square';
+      oscillator.frequency.value = frequency;
+      gain.gain.setValueAtTime(0.1, context.currentTime);
+      oscillator.start();
+      oscillator.stop(context.currentTime + duration / 1000);
+    }
+
+    let gameSpeed = 5;
+    let gravity = 0.75;
+    let score = 0;
+    let gameOver = false;
+
+    // Show intro message
+    setTimeout(() => {
+      alert("💾 YOU ARE A VIRUS\n\nSlip through the cracks of cyberspace.\nAvoid the blue antivirus drones and firewall bots.\nBreak into the mainframe at 5000 points to complete your mission.");
+    }, 100);
+
+    let hacker = {
+      x: 50,
+      y: 200,
+      width: 30,
+      height: 40,
+      velocityY: 0,
+      jumping: false,
+      draw() {
+        ctx.fillStyle = '#00ff00';
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+      },
+      update() {
+        this.y += this.velocityY;
+        this.velocityY += gravity;
+        if (this.y > 200) {
+          this.y = 200;
+          this.jumping = false;
+        }
+      }
+    };
+
+    class Obstacle {
+      constructor(x, type) {
+        this.x = x;
+        this.width = 20;
+        this.height = type === 'bot' ? 40 : 20;
+        this.y = type === 'bot' ? 200 : 160;
+        this.type = type;
+      }
+      draw() {
+        ctx.fillStyle = this.type === 'bot' ? '#ff0000' : '#00ffff';
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+      }
+      update() {
+        this.x -= gameSpeed;
+      }
+    }
+
+    let obstacles = [];
+    let frame = 0;
+
+    function spawnObstacle() {
+      const type = Math.random() > 0.5 ? 'bot' : 'drone';
+      const spacing = Math.random() * 200 + 200;
+      obstacles.push(new Obstacle(canvas.width + spacing, type));
+    }
+
+    function detectCollision(a, b) {
+      return a.x < b.x + b.width &&
+             a.x + a.width > b.x &&
+             a.y < b.y + b.height &&
+             a.y + a.height > b.y;
+    }
+
+    function resetGame() {
+      hacker = {
+        x: 50,
+        y: 200,
+        width: 30,
+        height: 40,
+        velocityY: 0,
+        jumping: false,
+        draw() {
+          ctx.fillStyle = '#00ff00';
+          ctx.fillRect(this.x, this.y, this.width, this.height);
+        },
+        update() {
+          this.y += this.velocityY;
+          this.velocityY += gravity;
+          if (this.y > 200) {
+            this.y = 200;
+            this.jumping = false;
+          }
+        }
+      };
+      obstacles = [];
+      frame = 0;
+      score = 0;
+      gameOver = false;
+      gameLoop();
+    }
+
+    function gameLoop() {
+      if (gameOver) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      hacker.update();
+      hacker.draw();
+
+      if (frame % 100 === 0) spawnObstacle();
+
+      obstacles.forEach((obs, i) => {
+        obs.update();
+        obs.draw();
+
+        if (detectCollision(hacker, obs)) {
+          playBeep(220, 300);
+          gameOver = true;
+          setTimeout(() => {
+            if (score >= 5000) {
+              alert("😈 YOU'VE BROKEN INTO THE MAINFRAME\nAccess granted.\nAll data is yours now.");
+            } else {
+              alert(`☠ YOU GOT CAUGHT!\nFinal score: ${score}\nBetter luck next breach.`);
+            }
+            resetGame();
+          }, 1000);
+        }
+
+        if (obs.x + obs.width < 0) obstacles.splice(i, 1);
+      });
+
+      // Score display
+      ctx.fillStyle = '#00ff00';
+      ctx.font = '16px Courier New';
+      ctx.fillText(`SCORE: ${score}`, 20, 30);
+
+      score++;
+      frame++;
+      requestAnimationFrame(gameLoop);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.code === 'Space' || e.code === 'ArrowUp') && !hacker.jumping) {
+        playBeep(660, 100);
+        hacker.velocityY = -18;
+        hacker.jumping = true;
+      }
+    });
+
+    gameLoop();
+  </script>
+</body>
+</html>
