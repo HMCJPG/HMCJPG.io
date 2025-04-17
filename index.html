@@ -10,16 +10,17 @@
   <header>
     <h1>Jason Gounder</h1>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="About.html">About</a>
-      <a href="Experience.html">Experience</a>
-      <a href="Projects.html">Projects</a>
-      <a href="Contact.html">Contact</a>
+      <a class="glitch-hover" data-text="Home" href="index.html">Home</a>
+      <a class="glitch-hover" data-text="About" href="About.html">About</a>
+      <a class="glitch-hover" data-text="Experience" href="Experience.html">Experience</a>
+      <a class="glitch-hover" data-text="Projects" href="Projects.html">Projects</a>
+      <a class="glitch-hover" data-text="Contact" href="Contact.html">Contact</a>
     </nav>
+    
   </header>
 
   <section>
-    <h2>Welcome</h2>
+    <h2 class="scan-sweep">Welcome</h2>
     <p>Hi, I'm Jason — a Computer Science student at Harvey Mudd College with a mission-driven mindset and a passion for building secure, impactful technology. Whether it's AI-powered compliance systems, real-time data visualizations, or cybersecurity training platforms, I build with both engineering precision and real-world purpose. This portfolio is a glimpse into the work I’ve done across defense tech, academic research, and mentorship.</p>
 
     <h3>What I Do</h3>
@@ -49,5 +50,23 @@
   <footer>
     <p>&copy; 2025 Jason Gounder. All rights reserved.</p>
   </footer>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const links = document.querySelectorAll('a');
+      links.forEach(link => {
+        if (link.hostname === window.location.hostname) {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.body.classList.add('transition-out');
+            const href = link.getAttribute('href');
+            setTimeout(() => {
+              window.location.href = href;
+            }, 500);
+          });
+        }
+      });
+    });
+  </script>
+  
 </body>
 </html>

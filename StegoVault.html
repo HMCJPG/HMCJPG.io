@@ -42,16 +42,17 @@
   <header>
     <h1>Jason Gounder</h1>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="About.html">About</a>
-      <a href="Experience.html">Experience</a>
-      <a href="Projects.html">Projects</a>
-      <a href="Contact.html">Contact</a>
+      <a class="glitch-hover" data-text="Home" href="index.html">Home</a>
+      <a class="glitch-hover" data-text="About" href="About.html">About</a>
+      <a class="glitch-hover" data-text="Experience" href="Experience.html">Experience</a>
+      <a class="glitch-hover" data-text="Projects" href="Projects.html">Projects</a>
+      <a class="glitch-hover" data-text="Contact" href="Contact.html">Contact</a>
     </nav>
+    
   </header>
 
   <section class="container">
-    <h2>🖼️ StegoVault: Image Steganography</h2>
+    <h2 class="scan-sweep">🖼️ StegoVault: Image Steganography</h2>
     <p>Hide your secret message inside an image using lightweight steganography.</p>
 
     <input type="file" id="imageInput" accept="image/*">
@@ -105,5 +106,23 @@
       reader.readAsDataURL(imgInput);
     }
   </script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const links = document.querySelectorAll('a');
+      links.forEach(link => {
+        if (link.hostname === window.location.hostname) {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.body.classList.add('transition-out');
+            const href = link.getAttribute('href');
+            setTimeout(() => {
+              window.location.href = href;
+            }, 400);
+          });
+        }
+      });
+    });
+  </script>
+  
 </body>
 </html>

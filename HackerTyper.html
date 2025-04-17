@@ -33,16 +33,17 @@
   <header>
     <h1>Jason Gounder</h1>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="About.html">About</a>
-      <a href="Experience.html">Experience</a>
-      <a href="Projects.html">Projects</a>
-      <a href="Contact.html">Contact</a>
+      <a class="glitch-hover" data-text="Home" href="index.html">Home</a>
+      <a class="glitch-hover" data-text="About" href="About.html">About</a>
+      <a class="glitch-hover" data-text="Experience" href="Experience.html">Experience</a>
+      <a class="glitch-hover" data-text="Projects" href="Projects.html">Projects</a>
+      <a class="glitch-hover" data-text="Contact" href="Contact.html">Contact</a>
     </nav>
+    
   </header>
 
   <section>
-    <h2>HackerTyper Simulation</h2>
+    <h2 class="scan-sweep">HackerTyper Simulation</h2>
     <p>Start typing anywhere on the screen. Press <strong>Shift+Enter</strong> for ACCESS GRANTED or <strong>Alt+Enter</strong> for ACCESS DENIED.</p>
     <div id="terminal"></div>
     <div id="status"></div>
@@ -98,5 +99,23 @@
       window.scrollTo(0, document.body.scrollHeight);
     });
   </script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const links = document.querySelectorAll('a');
+      links.forEach(link => {
+        if (link.hostname === window.location.hostname) {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.body.classList.add('transition-out');
+            const href = link.getAttribute('href');
+            setTimeout(() => {
+              window.location.href = href;
+            }, 400);
+          });
+        }
+      });
+    });
+  </script>
+  
 </body>
 </html>
