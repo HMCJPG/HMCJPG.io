@@ -48,16 +48,17 @@
   <header>
     <h1>Jason Gounder</h1>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="About.html">About</a>
-      <a href="Experience.html">Experience</a>
-      <a href="Projects.html">Projects</a>
-      <a href="Contact.html">Contact</a>
+      <a class="glitch-hover" data-text="Home" href="index.html">Home</a>
+      <a class="glitch-hover" data-text="About" href="About.html">About</a>
+      <a class="glitch-hover" data-text="Experience" href="Experience.html">Experience</a>
+      <a class="glitch-hover" data-text="Projects" href="Projects.html">Projects</a>
+      <a class="glitch-hover" data-text="Contact" href="Contact.html">Contact</a>
     </nav>
+    
   </header>
 
   <section class="container">
-    <h2>🧪 CyberSpork v0.1</h2>
+    <h2 class="scan-sweep">🧪 CyberSpork v0.1</h2>
     <p>A bite-sized CyberChef for quick encoding/decoding tasks. Paste text, hit a button, get results.</p>
 
     <textarea id="input" placeholder="Enter your input here..."></textarea>
@@ -114,5 +115,23 @@
       document.getElementById('output').value = output;
     }
   </script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const links = document.querySelectorAll('a');
+      links.forEach(link => {
+        if (link.hostname === window.location.hostname) {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.body.classList.add('transition-out');
+            const href = link.getAttribute('href');
+            setTimeout(() => {
+              window.location.href = href;
+            }, 400);
+          });
+        }
+      });
+    });
+  </script>
+  
 </body>
 </html>
