@@ -5,8 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jason Gounder | Portfolio</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    #boot-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+      color: #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-family: monospace;
+      font-size: 1.2rem;
+      z-index: 9999;
+    }
+    .typewriter {
+      border-right: 2px solid #00ff00;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 6s steps(40, end) forwards, blink 0.8s step-end infinite;
+    }
+    @keyframes typing {
+  from { width: 0; }
+  to { width: 75ch; } /* stops before the full screen */
+}
+      to { width: 100%; }
+    }
+    @keyframes blink {
+      from, to { border-color: transparent; }
+      50% { border-color: #00ff00; }
+    }
+  </style>
 </head>
 <body>
+  <div id="boot-screen">
+    <div class="typewriter">
+      [BOOTING SYSTEM...]<br>
+      Transmission intercepted.<br>
+      Loading jasongounder.sys...
+    </div>
+  </div>
+
   <header>
     <h1>Jason Gounder</h1>
     <nav>
@@ -16,7 +59,6 @@
       <a class="glitch-hover" data-text="Projects" href="Projects.html">Projects</a>
       <a class="glitch-hover" data-text="Contact" href="Contact.html">Contact</a>
     </nav>
-    
   </header>
 
   <section>
@@ -50,7 +92,9 @@
   <footer>
     <p>&copy; 2025 Jason Gounder. All rights reserved.</p>
   </footer>
+
   <script>
+    // Intercept page transitions
     window.addEventListener('DOMContentLoaded', () => {
       const links = document.querySelectorAll('a');
       links.forEach(link => {
@@ -65,8 +109,23 @@
           });
         }
       });
+
+      // Show boot screen only on first load (per session)
+      if (!sessionStorage.getItem('visited')) {
+        const boot = document.getElementById('boot-screen');
+        setTimeout(() => {
+        boot.style.display = 'none';
+      }, 8500);
+
+      // Allow skipping with click
+      boot.addEventListener('click', () => {
+        boot.style.display = 'none';
+      });
+        sessionStorage.setItem('visited', 'true');
+      } else {
+        document.getElementById('boot-screen').style.display = 'none';
+      }
     });
   </script>
-  
 </body>
 </html>
